@@ -1,0 +1,7 @@
+# List your Gmail accounts here, one per line
+# Lines starting with # are ignored
+#
+# Example:
+# myemail@gmail.com
+# oldemail@gmail.com
+# work.account@gmail.com

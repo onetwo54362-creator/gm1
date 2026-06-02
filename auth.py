@@ -40,11 +40,30 @@ def setup_account(email, credentials_file=CREDENTIALS_FILE):
     _ensure_tokens_dir()
 
     if not os.path.exists(credentials_file):
-        logger.error(f"Missing {credentials_file}.")
-        print(f"\n\u274c '{credentials_file}' not found!")
-        print("   Download it from: https://console.cloud.google.com/apis/credentials")
-        print("   Save it in this directory as 'credentials.json'")
-        return False
+        print(f"\n\U0001f4cb '{credentials_file}' not found!")
+        print("   Please paste the contents of your credentials.json file below.")
+        print("   When you are done pasting, type DONE on a new line and press Enter:")
+        
+        lines = []
+        while True:
+            try:
+                line = input()
+                if line.strip() == 'DONE':
+                    break
+                lines.append(line)
+            except EOFError:
+                break
+                
+        json_text = '\n'.join(lines)
+        try:
+            # Verify it's valid JSON
+            json.loads(json_text)
+            with open(credentials_file, 'w') as f:
+                f.write(json_text)
+            print(f"\u2705 Saved to {credentials_file}!\n")
+        except json.JSONDecodeError:
+            print(f"\u274c Invalid JSON pasted. Please try again.")
+            return False
 
     token_file = _token_path(email)
     if os.path.exists(token_file):

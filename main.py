@@ -290,6 +290,9 @@ Examples:
     args = parser.parse_args()
     if not args.command:
         args.command = 'auto'
+        args.services = 'all'
+        args.output = 'exports'
+        args.gmail_mode = 'full'
 
     setup_logging(getattr(args, 'verbose', False))
 

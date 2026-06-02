@@ -154,6 +154,8 @@ def cmd_auto(args):
     print("\u2705 All done! You can run python main.py again anytime to continue.")
 
 def cmd_setup(args):
+    """Legacy setup command — redirects to auto mode."""
+    cmd_auto(args)
 
 
 def cmd_export(args):

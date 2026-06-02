@@ -57,18 +57,34 @@ def setup_logging(verbose=False):
 
 
 def cmd_setup(args):
-    """Authenticate accounts listed in accounts.txt."""
+    """Authenticate accounts listed in accounts.txt or input by user."""
     accounts = load_accounts_file('accounts.txt')
 
     if not accounts:
-        print('\u274c No accounts found in accounts.txt')
-        print('   Add your Gmail addresses to accounts.txt, one per line.')
-        print('   Example:')
-        print('     myemail@gmail.com')
-        print('     oldemail@gmail.com')
-        return
+        print('No accounts found in accounts.txt.')
+        print('\nPlease paste the Gmail addresses you want to export (one per line).')
+        print('When you are done, leave a blank line and press Enter:')
+        
+        while True:
+            try:
+                line = input().strip()
+                if not line:
+                    break
+                if line and not line.startswith('#'):
+                    accounts.append(line)
+            except EOFError:
+                break
+                
+        if not accounts:
+            print('\u274c No accounts entered. Exiting.')
+            return
+            
+        with open('accounts.txt', 'w') as f:
+            for email in accounts:
+                f.write(f'{email}\n')
+        print(f'\n\u2705 Saved {len(accounts)} account(s) to accounts.txt\n')
 
-    print(f'Found {len(accounts)} account(s) in accounts.txt\n')
+    print(f'Found {len(accounts)} account(s) to setup.\n')
 
     success = 0
     for email in accounts:
